@@ -25,7 +25,6 @@ namespace CustomerApi
                 var dbContext = services.GetService<CustomerApiContext>();
                 DbInitializer.Initialize(dbContext);
             }
-
             host.Run();
         }
 

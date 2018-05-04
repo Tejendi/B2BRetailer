@@ -48,10 +48,9 @@ namespace OrderApi.Controllers
             }
 
             // Call ProductApi to get the product ordered
-            RestClient c = new RestClient();
+            RestClient c = new RestClient {BaseUrl = new Uri("http://localhost:5000/api/products/")};
             // You may need to change the port number in the BaseUrl below
             // before you can run the request.
-            c.BaseUrl = new Uri("http://localhost:5000/api/products/");
             var request = new RestRequest(order.ProductId.ToString(), Method.GET);
             var response = c.Execute<Product>(request);
             var orderedProduct = response.Data;
@@ -76,5 +75,29 @@ namespace OrderApi.Controllers
             return NoContent();
         }
 
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            repository.Remove(id);
+        }
+        // DELETE api/values/5
+        [HttpPost]
+        public void Cancel(Order order)
+        {
+            //THIS IS SO WRONG NEVER DO THIS PLX.
+            order.Status = OrderStatusEnum.Canceled;
+            repository.Edit(order);
+        }
+        [HttpGet]
+        public decimal CalaculateShippingCharge()
+        {
+            return (decimal) 1000.3;
+        }
+        [HttpGet]
+        public DateTime CalaculateDeliveryDate()
+        {
+            return DateTime.Today;
+        }
     }
 }

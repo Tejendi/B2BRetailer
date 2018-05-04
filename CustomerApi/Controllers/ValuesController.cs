@@ -2,43 +2,65 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CustomerApi.Data;
+using CustomerApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using RestSharp;
+
 
 namespace CustomerApi.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private readonly CustomerRepository _repository;
+
+        public ValuesController(CustomerRepository repository)
+        {
+            _repository = repository;
+        }
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Customer> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _repository.GetAll();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Customer Get(int id)
         {
-            return "value";
+
+            return _repository.Get(id);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public Customer Post([FromBody]Customer customer)
         {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
+            if (customer.Id <= 0)
+                return _repository.Add(customer);
+            _repository.Edit(customer);
+            return _repository.Get(customer.Id);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _repository.Remove(id);
+        }
+
+        [HttpGet("{id}")]
+        public bool ValidateCreditStanding(string id)
+        {
+            RestClient c = new RestClient { BaseUrl = new Uri("http://localhost:5000/api/orders/GetAllFromCustomer") };
+            // You may need to change the port number in the BaseUrl below
+            // before you can run the request.
+            var request = new RestRequest(id, Method.GET);
+            var response = c.Execute<List<Order>>(request);
+            var orders = response.Data;
+            return orders.Any(x => x.Status == 3);            
         }
     }
 }
