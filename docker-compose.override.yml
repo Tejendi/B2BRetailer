@@ -1,17 +1,17 @@
 version: '3'
 
 services:
-  customerApi:
+  customerapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "80"
-  orderApi:
+  orderapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "80"
-  productApi:
+  productapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
