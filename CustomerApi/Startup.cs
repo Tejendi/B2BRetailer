@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CustomerApi.Data;
+﻿using CustomerApi.Data;
 using CustomerApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace CustomerApi
 {
@@ -30,7 +24,7 @@ namespace CustomerApi
             services.AddDbContext<CustomerApiContext>(opt => opt.UseInMemoryDatabase("ProductDb"));
 
             // Register OrderRepository for dependency injection.
-            services.AddScoped<IRepository<Customer>, CustomerRepository>();
+            services.AddTransient<IRepository<Customer>, CustomerRepository>();
 
             services.AddMvc();
         }

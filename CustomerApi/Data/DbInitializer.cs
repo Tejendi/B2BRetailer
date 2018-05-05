@@ -1,8 +1,5 @@
-﻿using System;
+﻿using CustomerApi.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CustomerApi.Data
 {
@@ -14,18 +11,39 @@ namespace CustomerApi.Data
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
+
+
+
             //// Look for any Products
             //if (context.Orders.Any())
             //{
             //    return;   // DB has been seeded
             //}
 
-            //List<Order> orders = new List<Order>
-            //{
-            //    new Order { Date = DateTime.Today, ProductId = 1, Quantity = 2 }
-            //};
+            List<Customer> orders = new List<Customer>
+            {
+                new Customer
+                {
+                    CompanyName = "Cardboard Murders Inc.",
+                    Email = "sales@cardboardmurders.com",
+                    ShippingAddress = new Address()
+                    {
+                        City = "Nowhere",
+                        StreetAddress = "Cardboard box at the corner of 53rd and 22nd",
+                        ZipCode = "????"
+                    },
+                    Phone = "Payphone at 53rd st",
+                    BillingAddress = new Address()
+                    {
+                        City = "Washington, DC",
+                        StreetAddress = "The White House, 1600 Pennsylvania Ave NW",
+                        ZipCode = "20500"
+                    }
 
-            //context.Orders.AddRange(orders);
+                }
+            };
+
+            context.Customers.AddRange(orders);
             context.SaveChanges();
         }
     }

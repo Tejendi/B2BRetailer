@@ -10,7 +10,7 @@ namespace CustomerApi.Models
     {
         public int Id { get; set; }
         public string StreetAddress { get; set; }
-        public short ZipCode { get; set; }
+        public string ZipCode { get; set; }
         public string City { get; set; }
     }
 }

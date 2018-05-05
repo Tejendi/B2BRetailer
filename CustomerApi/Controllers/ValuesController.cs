@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CustomerApi.Data;
+﻿using CustomerApi.Data;
 using CustomerApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace CustomerApi.Controllers
@@ -13,9 +12,9 @@ namespace CustomerApi.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly CustomerRepository _repository;
+        private readonly IRepository<Customer> _repository;
 
-        public ValuesController(CustomerRepository repository)
+        public ValuesController(IRepository<Customer> repository)
         {
             _repository = repository;
         }
@@ -51,16 +50,16 @@ namespace CustomerApi.Controllers
             _repository.Remove(id);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet, Route("[action]/{id}")]
         public bool ValidateCreditStanding(string id)
         {
-            RestClient c = new RestClient { BaseUrl = new Uri("http://localhost:5000/api/orders/GetAllFromCustomer") };
+            RestClient c = new RestClient { BaseUrl = new Uri("http://localhost:55557/api/orders/GetAllFromCustomer") };
             // You may need to change the port number in the BaseUrl below
             // before you can run the request.
-            var request = new RestRequest(id, Method.GET);
-            var response = c.Execute<List<Order>>(request);
-            var orders = response.Data;
-            return orders.Any(x => x.Status == 3);            
+            RestRequest request = new RestRequest(id, Method.GET);
+            IRestResponse<List<Order>> response = c.Execute<List<Order>>(request);
+            List<Order> orders = response.Data;
+            return orders != null && orders.All(x => x.Status != 2); //None are "completed".            
         }
     }
 }

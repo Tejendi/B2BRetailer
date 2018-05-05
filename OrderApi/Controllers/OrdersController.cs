@@ -1,36 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OrderApi.Data;
 using OrderApi.Models;
 using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OrderApi.Controllers
 {
     [Route("api/Orders")]
     public class OrdersController : Controller
     {
-        private readonly IRepository<Order> repository;
+        private readonly IRepository<Order> _repository;
 
         public OrdersController(IRepository<Order> repos)
         {
-            repository = repos;
+            _repository = repos;
         }
 
         // GET: api/orders
         [HttpGet]
         public IEnumerable<Order> Get()
         {
-            return repository.GetAll();
+            return _repository.GetAll();
         }
 
         // GET api/products/5
         [HttpGet("{id}", Name = "GetOrder")]
         public IActionResult Get(int id)
         {
-            var item = repository.Get(id);
+            var item = _repository.Get(id);
             if (item == null)
             {
                 return NotFound();
@@ -66,7 +65,7 @@ namespace OrderApi.Controllers
 
                 if (updateResponse.IsSuccessful)
                 {
-                    var newOrder = repository.Add(order);
+                    var newOrder = _repository.Add(order);
                     return CreatedAtRoute("GetOrder", new { id = newOrder.Id }, newOrder);
                 }
             }
@@ -79,7 +78,7 @@ namespace OrderApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            repository.Remove(id);
+            _repository.Remove(id);
         }
         // DELETE api/values/5
         [HttpPost]
@@ -87,17 +86,24 @@ namespace OrderApi.Controllers
         {
             //THIS IS SO WRONG NEVER DO THIS PLX.
             order.Status = OrderStatusEnum.Canceled;
-            repository.Edit(order);
+            _repository.Edit(order);
         }
-        [HttpGet]
+        [HttpGet, Route("[action]")]
         public decimal CalaculateShippingCharge()
         {
             return (decimal) 1000.3;
         }
-        [HttpGet]
+
+        [HttpGet, Route("[action]")]
         public DateTime CalaculateDeliveryDate()
         {
             return DateTime.Today;
+        }
+
+        [HttpGet, Route("[action]/{id}")]
+        public IEnumerable<Order> GetAllFromCustomer(int id)
+        {
+            return _repository.GetAll().Where(x => x.CustomerRegNo == id);
         }
     }
 }

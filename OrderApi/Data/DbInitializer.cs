@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using OrderApi.Models;
+﻿using OrderApi.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OrderApi.Data
 {
@@ -21,7 +21,7 @@ namespace OrderApi.Data
 
             List<Order> orders = new List<Order>
             {
-                new Order { Date = DateTime.Today, ProductId = 1, Quantity = 2 }
+                new Order { Date = DateTime.Today, ProductId = 1, Quantity = 2, CustomerRegNo = 1, Status = OrderStatusEnum.Completed}
             };
 
             context.Orders.AddRange(orders);
