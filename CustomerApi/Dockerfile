@@ -4,8 +4,8 @@ EXPOSE 80
 
 FROM microsoft/aspnetcore-build:2.0-nanoserver-1709 AS build
 WORKDIR /src
-COPY CustomerApi.sln ./
-COPY CustomerApi/CustomerApi.csproj CustomerApi/
+#COPY CustomerApi.sln ./
+COPY CustomerApi/CustomerApi.csproj /src
 RUN dotnet restore -nowarn:msb3202,nu1503
 COPY . .
 WORKDIR /src/CustomerApi
