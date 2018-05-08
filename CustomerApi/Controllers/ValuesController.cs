@@ -53,7 +53,7 @@ namespace CustomerApi.Controllers
         [HttpGet, Route("[action]/{id}")]
         public bool ValidateCreditStanding(string id)
         {
-            RestClient c = new RestClient { BaseUrl = new Uri("http://localhost:55557/api/orders/GetAllFromCustomer") };
+            RestClient c = new RestClient { BaseUrl = new Uri("http://localhost:8020/api/orders/GetAllFromCustomer") };
             // You may need to change the port number in the BaseUrl below
             // before you can run the request.
             RestRequest request = new RestRequest(id, Method.GET);

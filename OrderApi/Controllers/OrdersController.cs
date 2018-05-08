@@ -47,7 +47,7 @@ namespace OrderApi.Controllers
             }
 
             // Call ProductApi to get the product ordered
-            RestClient c = new RestClient {BaseUrl = new Uri("http://localhost:5000/api/products/")};
+            RestClient c = new RestClient {BaseUrl = new Uri("http://localhost:8010/api/products/")};
             // You may need to change the port number in the BaseUrl below
             // before you can run the request.
             var request = new RestRequest(order.ProductId.ToString(), Method.GET);
